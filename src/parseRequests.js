@@ -5,11 +5,11 @@ import { coordinatesClassifier, urlClassifier } from './classifiers.js';
 (async () => {
     const contentTypes = ["html", "json", "text"];
 
-    const browser = await puppeteer.launch({"headless": false});
+    const browser = await puppeteer.launch({"headless": true});
     const page = await browser.newPage();
     await page.setDefaultNavigationTimeout(60000);
   
-    const url = 'https://avoska.ru/shops/?page=shops'
+    const url = 'https://www.avia.at/tanken/tankstellenfinder-diesel-super-95-super-plus-98-biofrei-48638.html'
 
     const csvWriter = createObjectCsvWriter({
         path: 'data.csv',
@@ -51,7 +51,9 @@ import { coordinatesClassifier, urlClassifier } from './classifiers.js';
         }
     });
 
-    await page.goto(url, { waitUntil: 'networkidle0' });  
+    await page.goto(url, { waitUntil: 'networkidle0' });
+    await page.waitForTimeout(10000);
+    await page.screenshot({path: "screenshot.png", fullPage: true});
     await browser.close();
 
     csvWriter.writeRecords(records)
